@@ -167,3 +167,6 @@ https://shields.io/category/downloads
 
 Example: https://img.shields.io/github/downloads-pre/janssen-io/foundry-github-workflow/latest/my-module.zip
 ![my-module-downloads](https://img.shields.io/github/downloads-pre/janssen-io/foundry-github-workflow/latest/my-module.zip)
+
+## Existing FVTT module workflows
+- Token Hotbar: https://github.com/janssen-io/foundry-token-hotbar/tree/master/.github/workflows
