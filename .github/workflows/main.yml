@@ -8,6 +8,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: ./.github/workflows/create-zip.sh
+      env:
+          CI: true
     - name: Get Version                                   # Run the script that returns the version from `module.json`
       shell: bash
       id: get-version
