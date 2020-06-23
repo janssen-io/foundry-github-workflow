@@ -1,0 +1,6 @@
+{
+    "name": "my-module",
+    "title": "My Module",
+    "version": "1.0.0",
+    "scripts": [ "my-module.js" ]
+}
