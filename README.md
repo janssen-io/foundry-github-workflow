@@ -101,6 +101,9 @@ jobs:
 
 Pushing those changes should update the existing release with `my-module.zip` in the list of assets.
 
+> NB: The attached source code on the release will **not** be updated and the tag will **not** be moved in your repository.
+> However, when you download attached `module.json`, you will see it is indeed updated. 😀
+
 ## Bonus: Creating a separate release for every version
 It is often useful to provide older versions too, in case users want to revert or if you need it for testing purposes.
 
