@@ -169,4 +169,4 @@ Example: https://img.shields.io/github/downloads-pre/janssen-io/foundry-github-w
 ![my-module-downloads](https://img.shields.io/github/downloads-pre/janssen-io/foundry-github-workflow/latest/my-module.zip)
 
 ## Existing FVTT module workflows
-- Token Hotbar: https://github.com/janssen-io/foundry-token-hotbar/tree/master/.github/workflows
+- Token Hotbar: https://github.com/janssen-io/foundry-token-hotbar/blob/master/.github/workflows/main.yml
