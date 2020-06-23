@@ -19,12 +19,12 @@ jobs:
       uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
-        name: Release ${{ steps.extract-version.outputs.version }} # Use the version in the name
+        name: Release ${{ steps.get-version.outputs.version }} # Use the version in the name
         draft: false
         prerelease: false
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: './module.json,./my-module.zip'
-        tag: ${{ steps.extract-version.outputs.version }} # Use the version as the tag
+        tag: ${{ steps.get-version.outputs.version }} # Use the version as the tag
     - name: Create Release
       id: create_latest_release
       uses: ncipollo/release-action@v1
