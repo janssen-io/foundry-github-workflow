@@ -48,7 +48,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Create Release
-      id: create_release
+      id: create_latest_release
       uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
@@ -70,6 +70,8 @@ However, one file is still missing: the `my-module.zip`! To create this file we 
 ```bash
 zip -r ./my-module.zip module.json my-module.js lang/ templates/
 ```
+
+> ! Important. In order to make it executable in the workflow. Also execute the following command on your command line: `git update-index --add --chmod=+x .github/workflows/create-zip.sh`.
 
 And to your `.github/workflows/main.yml` you need to add the following changes:
 
@@ -128,18 +130,18 @@ jobs:
       id: get-version
       run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)"
     - name: Create Release                                # Create an additional release for this version
-      id: create_release
+      id: create_versioned_release
       uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
-        name: Release ${{ steps.extract-version.outputs.version }} # Use the version in the name
+        name: Release ${{ steps.get-version.outputs.version }} # Use the version in the name
         draft: false
         prerelease: false
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: './module.json,./my-module.zip'
-        tag: ${{ steps.extract-version.outputs.version }} # Use the version as the tag
+        tag: ${{ steps.get-version.outputs.version }} # Use the version as the tag
     - name: Create Release
-      id: create_release
+      id: create_versioned_release
       uses: ncipollo/release-action@v1
       if: endsWith(github.ref, 'master') # Only update the latest release when pushing to the master branch
       with:
@@ -160,5 +162,5 @@ So if you do all your experimental development on a separate branch, the *Latest
 Check out the github download shields over at shields.io to get a cool image with the download count:
 https://shields.io/category/downloads
 
-Example: https://img.shields.io/github/downloads-pre/janssen-io/foundry-token-hotbar/2.1.3.1/TokenHotbar.zip
-![TokenHotbarDownloads](https://img.shields.io/github/downloads-pre/janssen-io/foundry-token-hotbar/2.1.3.1/TokenHotbar.zip)
+Example: https://img.shields.io/github/downloads-pre/janssen-io/foundry-github-workflow/latest/my-module.zip
+![my-module-downloads](https://img.shields.io/github/downloads-pre/janssen-io/foundry-github-workflow/latest/my-module.zip)

@@ -1,6 +1,8 @@
 {
     "name": "my-module",
     "title": "My Module",
-    "version": "1.0.0",
-    "scripts": [ "my-module.js" ]
+    "version": "1.0.1",
+    "scripts": [ "my-module.js" ],
+    "manifest": "https://github.com/janssen-io/foundry-github-workflow/releases/download/latest/module.json",
+    "download": "https://github.com/janssen-io/foundry-github-workflow/releases/download/latest/my-module.zip"
 }
