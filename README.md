@@ -65,15 +65,8 @@ If you push these changes to Github, you should see the first release being crea
 When you take a look at the release, you will see that we have successfully uploaded `module.json` and you can use the link to this *asset* as the manifest url in your future `module.json` and in the Foundry administration panel.
 
 ## Step 3: Creating and adding the zip file
-However, one file is still missing: the `my-module.zip`! To create this file we need to add another file to `.github/workflows/` named `create-zip.sh`. Inside this file, you will need the following contents:
-
-```bash
-zip -r ./my-module.zip module.json my-module.js lang/ templates/
-```
-
-> ! Important. In order to make it executable in the workflow. Also execute the following command on your command line: `git update-index --add --chmod=+x .github/workflows/create-zip.sh`.
-
-And to your `.github/workflows/main.yml` you need to add the following changes:
+However, one file is still missing: the `my-module.zip`! To add this file to our release, we need to create it in our workflow. Just above our release we will add the following line:
+`    - run: zip -r ./my-module.zip module.json my-module.js lang/ templates/`.
 
 ```yml
 name: my-module CI
@@ -85,9 +78,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: ./.github/workflows/create-zip.sh        # Call the script to create the zip-file
+    - run: zip -r ./my-module.zip module.json my-module.js lang/ templates/
     - name: Create Release
-      id: create_release
+      id: create_latest_release
       uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
@@ -95,7 +88,7 @@ jobs:
         draft: false
         prerelease: false
         token: ${{ secrets.GITHUB_TOKEN }}
-        artifacts: './module.json,./my-module.zip' # Add the created zip-file to the release
+        artifacts: './module.json'
         tag: latest
 ```
 
@@ -127,7 +120,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: ./.github/workflows/create-zip.sh
+    - run: zip -r ./my-module.zip module.json my-module.js lang/ templates/
     - name: Get Version                                   # Run the script that returns the version from `module.json`
       shell: bash
       id: get-version

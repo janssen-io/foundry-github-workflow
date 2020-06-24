@@ -7,28 +7,34 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: ./.github/workflows/create-zip.sh
-      env:
-          CI: true
-    - name: Get Version                                   # Run the script that returns the version from `module.json`
+
+    # create a zip file with all files required by the module to add to the release
+    - run: zip -r ./my-module.zip module.json my-module.js lang/ templates/
+
+    # Get the version from 'module.json'
+    - name: Get Version
       shell: bash
       id: get-version
       run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)"
-    - name: Create Release                                # Create an additional release for this version
+
+    # Create a release for this specific version
+    - name: Create Release
       id: create_version_release
       uses: ncipollo/release-action@v1
       with:
-        allowUpdates: true
-        name: Release ${{ steps.get-version.outputs.version }} # Use the version in the name
+        allowUpdates: true # set this to false if you want to prevent updating existing releases
+        name: Release ${{ steps.get-version.outputs.version }}
         draft: false
         prerelease: false
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: './module.json,./my-module.zip'
-        tag: ${{ steps.get-version.outputs.version }} # Use the version as the tag
+        tag: ${{ steps.get-version.outputs.version }}
+
+    # Update the 'latest' release
     - name: Create Release
       id: create_latest_release
       uses: ncipollo/release-action@v1
-      if: endsWith(github.ref, 'master') # Only update the latest release when pushing to the master branch
+      if: endsWith(github.ref, 'master')
       with:
         allowUpdates: true
         name: Latest
