@@ -257,3 +257,4 @@ Example: https://img.shields.io/github/downloads-pre/janssen-io/foundry-github-w
 
 ## Existing FVTT module workflows
 - Token Hotbar: https://github.com/janssen-io/foundry-token-hotbar/blob/master/.github/workflows/main.yml
+- Forien's Quest Log: https://github.com/Forien/foundryvtt-forien-quest-log/blob/master/.github/workflows/release.yml
