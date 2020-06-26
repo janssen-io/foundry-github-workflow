@@ -120,11 +120,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: zip -r ./my-module.zip module.json my-module.js lang/ templates/
     - name: Get Version                                   # Run the script that returns the version from `module.json`
       shell: bash
       id: get-version
       run: echo "::set-output name=version::$(node ./.github/workflows/get-version.js)"
+    - run: zip -r ./my-module.zip module.json my-module.js lang/ templates/
     - name: Create Release                                # Create an additional release for this version
       id: create_versioned_release
       uses: ncipollo/release-action@v1
@@ -235,11 +235,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - run: zip -r ./my-module.zip module.json my-module.js lang/ templates/
     - name: Update Version
       shell: bash
       id: set-version
       run: echo "::set-output name=version::$(node ./.github/workflows/set-version.js ${{ github.ref }})"
+    - run: zip -r ./my-module.zip module.json my-module.js lang/ templates/
     - name: Create Release
       id: create_versioned_release
       uses: ncipollo/release-action@v1
