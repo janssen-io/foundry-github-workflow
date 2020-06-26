@@ -181,13 +181,16 @@ Let's first create the file `.github/workflows/set-version.js` with the followin
 ```js
 var fs = require('fs');
 const manifest = JSON.parse(fs.readFileSync('module.json', 'utf8'));
-const tagVersion = process.argv[2]; // first argument is node, second is the filename of the script, third is the version we pass in our workflow.
+// first argument is node, second is the filename of the script, third is the version we pass in our workflow.
+// expected tag format is 'refs/tags/v{major}.{minor}.{patch}"
+const tagVersion = process.argv[2].split('/').slice(-1)[0]; 
 if (!tagVersion || !tagVersion.startsWith('v')) {
   console.error(`Invalid version specified: ${tagVersion}`);
   process.exitCode = 1;
 } else {
   manifest.version = tagVersion.substring(1); // strip the 'v'-prefix
   fs.writeFileSync('module.json', JSON.stringify(manifest, null, 2)); // pretty print JSON back to module.json
+  console.log(tagVersion);
 }
 ```
 
@@ -196,9 +199,10 @@ And of course we need to add this step to our yaml:
 ```yml
 name: my-module CI
 
-on: [push]
-  tags:
-    - v*
+on:
+  push:
+    tags:
+      - v*
 
 jobs:
   build:
@@ -209,7 +213,7 @@ jobs:
     - name: Update Version
       shell: bash
       id: set-version
-      run: node ./.github/workflows/set-version.js ${{ github.ref }} # github.ref contains the tag name
+      run: echo "::set-output name=version::$(node ./.github/workflows/set-version.js ${{ github.ref }})"
 
 # ...
 ```
@@ -221,9 +225,10 @@ Our final yaml will look like this:
 ```yml
 name: my-module CI
 
-on: [push]
-  tags:
-    - v*
+on:
+  push:
+    tags:
+      - v*
 
 jobs:
   build:
@@ -234,18 +239,17 @@ jobs:
     - name: Update Version
       shell: bash
       id: set-version
-      run: node ./.github/workflows/set-version.js ${{ github.ref }}
+      run: echo "::set-output name=version::$(node ./.github/workflows/set-version.js ${{ github.ref }})"
     - name: Create Release
       id: create_versioned_release
       uses: ncipollo/release-action@v1
       with:
         allowUpdates: true
-        name: Release ${{ github.ref }} # Also don't forget to use the tag for the release itself!
+        name: Release ${{ steps.set-version.outputs.version }}
         draft: false
         prerelease: false
         token: ${{ secrets.GITHUB_TOKEN }}
         artifacts: './module.json,./my-module.zip'
-        tag: ${{ github.ref }} # and one last reference to the tag
 ```
 
 ## Bonus: download count!
