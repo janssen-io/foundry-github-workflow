@@ -163,9 +163,10 @@ We start with specifying that the workflow should only run when a commit is push
 ```yml
 name: my-module CI
 
-on: [push]
-  tags:
-    - v*
+on:
+  push:
+    tags:
+      - v*
 
 # rest of the yml...
 ```
